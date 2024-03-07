@@ -30,6 +30,8 @@ const App = () => {
 
   return (
     <Container>
+      <Title>Telas</Title>
+
       <Title>Contador do Andrew</Title>
 
       <ButtonsContainer>

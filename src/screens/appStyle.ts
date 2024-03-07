@@ -2,7 +2,7 @@ import styled from 'styled-components/native';
 
 import {TextProps} from 'react-native';
 
-export const Container = styled.View`
+export const Container = styled.SafeAreaView`
   display: flex;
   align-items: center;
   justify-content: center;
@@ -27,7 +27,7 @@ export const ButtonText = styled.Text`
 `;
 
 export const Button = styled.TouchableOpacity`
-  padding: 12px 32px;
+  padding: 12px 16px;
   background-color: red;
   color: #f9f9f9;
   border-radius: 12px;
