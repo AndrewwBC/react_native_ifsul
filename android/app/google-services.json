@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "311452904420",
+    "project_id": "andrew-pdm",
+    "storage_bucket": "andrew-pdm.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:311452904420:android:ee7ab3a4d195e26d47b5f1",
+        "android_client_info": {
+          "package_name": "com.andrew_pdm"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA3jqT5R7GnCIwH9HwaVKl6n9l0fmtiiQ4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
