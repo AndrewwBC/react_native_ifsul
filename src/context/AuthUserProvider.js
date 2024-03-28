@@ -32,20 +32,32 @@ export const AuthUserProvider = ({children}) => {
     }
   }
 
+  async function deleteUserSession() {
+    try {
+      const sessionExists = await EncryptedStorage.getItem('user_session');
+
+      if (sessionExists) {
+        await EncryptedStorage.removeItem('user_session');
+      }
+    } catch (err) {
+      console.error(err.message);
+    }
+  }
+
   async function signIn(email, pass) {
     try {
       const {user} = await auth().signInWithEmailAndPassword(email, pass);
 
-      if (auth().currentUser.emailVerified) {
-        return 'Você deve validar seu email para continuar.';
+      if (!auth().currentUser.emailVerified) {
+        console.log(user);
+        return user.emailVerified;
       }
 
-      await storeUserSession(email, pass);
+      //await storeUserSession(email, pass);
       return user.getIdToken();
     } catch (e) {
       const errorMsg = launchServerMessageErro(e);
-      console.log(errorMsg);
-      throw new Error(errorMsg);
+      return errorMsg;
     }
   }
 
@@ -67,7 +79,8 @@ export const AuthUserProvider = ({children}) => {
     }
   }
   return (
-    <AuthUserContext.Provider value={{signIn, retrieveUserSession}}>
+    <AuthUserContext.Provider
+      value={{signIn, retrieveUserSession, deleteUserSession}}>
       {children}
     </AuthUserContext.Provider>
   );

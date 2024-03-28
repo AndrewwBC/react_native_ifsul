@@ -2,10 +2,8 @@
 import React, {useContext, useState} from 'react';
 import {Alert, TouchableHighlight} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import {CommonActions} from '@react-navigation/native';
 import {useTheme} from '@rneui/themed';
 
-import {AuthUserContext} from '../../../context/AuthUserProvider';
 import {MyInput} from '../../../components/MyInput';
 
 import {
@@ -18,6 +16,7 @@ import {
 } from './styles';
 import {Text} from '@rneui/base';
 import {firebase} from '@react-native-firebase/auth';
+import {LoginUserContext} from '../../../context/LoginUserProvider';
 
 const ForgotPassword = ({navigation}) => {
   const [email, setEmail] = useState('');
@@ -26,13 +25,12 @@ const ForgotPassword = ({navigation}) => {
 
   const {theme} = useTheme();
 
-  const {signIn} = useContext(AuthUserContext);
+  const {forgotPassword} = useContext(LoginUserContext);
 
-  async function handleRetrievePassword() {
+  function handleRetrievePassword() {
     try {
       setLoading(true);
-      const {auth} = firebase;
-      const request = auth().sendPasswordResetEmail(email);
+      forgotPassword(email);
     } catch (err) {
       console.log(err);
     } finally {

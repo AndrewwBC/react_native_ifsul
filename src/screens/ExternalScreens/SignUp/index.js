@@ -1,5 +1,5 @@
 /* eslint-disable react-native/no-inline-styles */
-import React, {useState} from 'react';
+import React, {useContext, useState} from 'react';
 import {Alert} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {useTheme} from '@rneui/themed';
@@ -18,11 +18,12 @@ import {
 import {Text} from '@rneui/base';
 import {TouchableHighlight} from 'react-native';
 import {firebase} from '@react-native-firebase/auth';
+import {LoginUserContext} from '../../../context/LoginUserProvider';
 
 const SignUp = ({navigation}) => {
   const [userData, setUserData] = useState({
-    email: '',
-    password: '',
+    email: 'pelotas@maail.com',
+    password: '111111',
   });
   const [loading, setLoading] = useState(false);
   const [signUpResponse, setSignUpResponse] = useState(false);
@@ -30,18 +31,19 @@ const SignUp = ({navigation}) => {
 
   const {theme} = useTheme();
 
+  const {signUp} = useContext(LoginUserContext);
+
   async function handleSignUp() {
     try {
+      setErrorMsg('');
       setLoading(true);
       const {auth} = firebase;
-      const request = await auth().createUserWithEmailAndPassword(
-        userData.email,
-        userData.password,
-      );
+      const response = await signUp({
+        email: userData.email,
+        password: userData.password,
+      });
 
-      if (request.additionalUserInfo.isNewUser) {
-        setSignUpResponse('Registrado com sucesso!');
-      }
+      setSignUpResponse('Registrado com Sucesso!');
     } catch (error) {
       console.log(error.message);
       setErrorMsg(error.message);

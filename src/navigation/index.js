@@ -1,8 +1,8 @@
 import React from 'react';
 import Navigator from './Navigator';
 import {ThemeProvider, createTheme} from '@rneui/themed';
-import {COLORS} from '../assets/colors';
 import {AuthUserProvider} from '../context/AuthUserProvider';
+import {LoginUserProvider} from '../context/LoginUserProvider';
 
 const theme = createTheme({
   colors: {
@@ -37,7 +37,9 @@ const Providers = () => {
   return (
     <ThemeProvider theme={theme}>
       <AuthUserProvider>
-        <Navigator />
+        <LoginUserProvider>
+          <Navigator />
+        </LoginUserProvider>
       </AuthUserProvider>
     </ThemeProvider>
   );

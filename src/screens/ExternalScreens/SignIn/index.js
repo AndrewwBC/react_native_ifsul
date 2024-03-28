@@ -31,25 +31,23 @@ const SignIn = ({navigation}) => {
   const {signIn} = useContext(AuthUserContext);
 
   async function handleSignIn() {
-    console.log(userData);
-    try {
-      setLoading(true);
-      const request = await signIn(email, password);
+    setLoading(true);
 
+    const request = await signIn(userData.email, userData.password);
+    console.log(request);
+
+    if (!request.emailVerified) {
+      console.log('Email não verificado');
+    } else {
       navigation.dispatch(
         CommonActions.reset({
           index: 0,
           routes: [{name: 'AppStack'}],
         }),
       );
-
-      console.log(request);
-    } catch (error) {
-      console.log('Erro:' + error.message);
-      Alert.alert('Ops! Erro', error.message);
-    } finally {
-      setLoading(false);
     }
+
+    setLoading(false);
   }
 
   return (
