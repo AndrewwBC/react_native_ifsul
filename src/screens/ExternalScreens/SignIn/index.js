@@ -1,12 +1,10 @@
 /* eslint-disable react-native/no-inline-styles */
-import React, {useContext, useState} from 'react';
-import {Alert, TouchableHighlight} from 'react-native';
-import {SafeAreaView} from 'react-native-safe-area-context';
-import {CommonActions} from '@react-navigation/native';
-import {useTheme} from '@rneui/themed';
-
-import {AuthUserContext} from '../../../context/AuthUserProvider';
-import {MyInput} from '../../../components/MyInput';
+import React, { useContext, useState } from 'react';
+import { Alert, TouchableHighlight } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { CommonActions } from '@react-navigation/native';
+import { useTheme } from '@rneui/themed';
+import { AuthUserContext } from '../../../context/AuthUserProvider';
 
 import {
   ButtonText,
@@ -16,21 +14,28 @@ import {
   SignInButton,
   Title,
 } from './styles';
-import {Text} from '@rneui/base';
+import { Icon, Text } from '@rneui/base';
+import MyInput from '../../../components/MyInput';
 
-const SignIn = ({navigation}) => {
+const SignIn = ({ navigation }) => {
   const [userData, setUserData] = useState({
     email: '',
     password: '',
   });
   const [loading, setLoading] = useState(false);
   const [showPass, setShowPass] = useState(true);
+  const [errorMsg, setErrorMsg] = useState('');
 
-  const {theme} = useTheme();
+  const { theme } = useTheme();
 
-  const {signIn} = useContext(AuthUserContext);
+  const { signIn } = useContext(AuthUserContext);
 
   async function handleSignIn() {
+    if (userData.email.length === 0 || userData.password.length === 0) {
+      setErrorMsg('Preencha todos campos!');
+      Alert.alert('Preencha todos campos');
+      return;
+    }
     setLoading(true);
 
     const request = await signIn(userData.email, userData.password);
@@ -42,7 +47,7 @@ const SignIn = ({navigation}) => {
       navigation.dispatch(
         CommonActions.reset({
           index: 0,
-          routes: [{name: 'AppStack'}],
+          routes: [{ name: 'AppStack' }],
         }),
       );
     }
@@ -51,39 +56,72 @@ const SignIn = ({navigation}) => {
   }
 
   return (
-    <SafeAreaView style={{flex: 1}}>
+    <SafeAreaView style={{ flex: 1 }}>
       <Container>
         <Content>
           <Title>SignIn</Title>
           <FormContainer>
             <MyInput
+              leftIcon={
+                <Icon
+                  name="email-check-outline"
+                  type="material-community"
+                  size={26}
+                  color={'black'}
+                />
+              }
               placeholder="insira o seu email"
-              placeholderTextColor={'grey'}
               keyboardType="email-address"
               returnKeyType="next"
-              onChangeText={text =>
+              onChangeText={email =>
                 setUserData(prevState => ({
                   ...prevState,
-                  email: text,
+                  email,
                 }))
               }
             />
             <MyInput
-              placeholder="insira a sua senha"
-              placeholderTextColor={'grey'}
+              secureTextEntry={showPass}
+              placeholder="insira a senha"
               keyboardType="default"
               returnKeyType="go"
-              secureTextEntry={showPass}
-              onChangeText={text =>
+              leftIcon={
+                <Icon
+                  type="material-community"
+                  name="form-textbox-password"
+                  size={26}
+                  color={'black'}
+                />
+              }
+              rightIcon={
+                <Icon
+                  type="material-community"
+                  name={showPass ? 'eye-off' : 'eye'}
+                  size={26}
+                  color={'black'}
+                  onPress={() => setShowPass(!showPass)}
+                />
+              }
+              onChangeText={password =>
                 setUserData(prevState => ({
                   ...prevState,
-                  password: text,
+                  password,
                 }))
               }
             />
           </FormContainer>
+          <Text
+            style={{
+              height: 24,
+              color: 'red',
+              fontSize: 18,
+              textAlign: 'center',
+              marginTop: 12,
+            }}>
+            {errorMsg}
+          </Text>
           <SignInButton onPress={handleSignIn}>
-            <ButtonText style={{color: 'white'}}>SignIn</ButtonText>
+            <ButtonText style={{ color: 'white' }}>SignIn</ButtonText>
           </SignInButton>
 
           <TouchableHighlight
@@ -97,7 +135,7 @@ const SignIn = ({navigation}) => {
               alignItems: 'center',
               marginTop: 24,
             }}>
-            <Text style={{color: 'white', fontSize: 16}}>SignUp</Text>
+            <Text style={{ color: 'white', fontSize: 16 }}>SignUp</Text>
           </TouchableHighlight>
           <TouchableHighlight
             onPress={() => {
@@ -110,7 +148,7 @@ const SignIn = ({navigation}) => {
               alignItems: 'center',
               marginTop: 24,
             }}>
-            <Text style={{color: 'white', fontSize: 16}}>ForgotPassword</Text>
+            <Text style={{ color: 'white', fontSize: 16 }}>ForgotPassword</Text>
           </TouchableHighlight>
         </Content>
       </Container>

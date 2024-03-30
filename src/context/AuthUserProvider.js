@@ -37,6 +37,7 @@ export const AuthUserProvider = ({children}) => {
       const sessionExists = await EncryptedStorage.getItem('user_session');
 
       if (sessionExists) {
+        auth().signOut();
         await EncryptedStorage.removeItem('user_session');
       }
     } catch (err) {

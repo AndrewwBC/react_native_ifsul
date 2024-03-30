@@ -1,10 +1,8 @@
 /* eslint-disable react-native/no-inline-styles */
-import React, {useContext, useState} from 'react';
-import {Alert, TouchableHighlight} from 'react-native';
-import {SafeAreaView} from 'react-native-safe-area-context';
-import {useTheme} from '@rneui/themed';
-
-import {MyInput} from '../../../components/MyInput';
+import React, { useContext, useState } from 'react';
+import { Alert, TouchableHighlight } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { useTheme } from '@rneui/themed';
 
 import {
   ButtonText,
@@ -14,18 +12,15 @@ import {
   SignInButton,
   Title,
 } from './styles';
-import {Text} from '@rneui/base';
-import {firebase} from '@react-native-firebase/auth';
-import {LoginUserContext} from '../../../context/LoginUserProvider';
+import { Icon, Text } from '@rneui/base';
+import { LoginUserContext } from '../../../context/LoginUserProvider';
+import MyInput from '../../../components/MyInput';
 
-const ForgotPassword = ({navigation}) => {
+const ForgotPassword = ({ navigation }) => {
   const [email, setEmail] = useState('');
   const [loading, setLoading] = useState(false);
-  const [showPass, setShowPass] = useState(true);
 
-  const {theme} = useTheme();
-
-  const {forgotPassword} = useContext(LoginUserContext);
+  const { forgotPassword } = useContext(LoginUserContext);
 
   function handleRetrievePassword() {
     try {
@@ -39,12 +34,20 @@ const ForgotPassword = ({navigation}) => {
   }
 
   return (
-    <SafeAreaView style={{flex: 1}}>
+    <SafeAreaView style={{ flex: 1 }}>
       <Container>
         <Content>
           <Title>Recuperar Senha</Title>
           <FormContainer>
             <MyInput
+              leftIcon={
+                <Icon
+                  name="email-check-outline"
+                  type="material-community"
+                  size={26}
+                  color={'black'}
+                />
+              }
               placeholder="insira o seu email"
               placeholderTextColor={'grey'}
               keyboardType="email-address"
@@ -53,7 +56,7 @@ const ForgotPassword = ({navigation}) => {
             />
           </FormContainer>
           <SignInButton onPress={handleRetrievePassword}>
-            <ButtonText style={{color: 'white'}}>Recuperar Senha</ButtonText>
+            <ButtonText style={{ color: 'white' }}>Recuperar Senha</ButtonText>
           </SignInButton>
 
           <TouchableHighlight
@@ -67,7 +70,7 @@ const ForgotPassword = ({navigation}) => {
               alignItems: 'center',
               marginTop: 24,
             }}>
-            <Text style={{color: 'white', fontSize: 16}}>SignIn</Text>
+            <Text style={{ color: 'white', fontSize: 16 }}>SignIn</Text>
           </TouchableHighlight>
         </Content>
       </Container>
