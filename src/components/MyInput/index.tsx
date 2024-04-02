@@ -12,12 +12,7 @@ const MyInput = ({ leftIcon, rightIcon, ...rest }: MyInputProps) => {
     <Container>
       {leftIcon}
 
-      <Input
-        placeholderTextColor={'#999'}
-        multiline={true}
-        numberOfLines={1}
-        {...rest}
-      />
+      <Input placeholderTextColor={'#999'} numberOfLines={1} {...rest} />
 
       {rightIcon}
     </Container>

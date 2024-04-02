@@ -1,4 +1,4 @@
-export const theme = {
+export const styledTheme = {
   bg: '#F9F9F9',
   neutral: {
     c1: '#FFFFFF',
@@ -21,4 +21,5 @@ export const theme = {
     medium: '#e6bb52',
     dark: '#ffa500',
   },
+  error: '#D21300',
 };

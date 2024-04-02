@@ -1,12 +1,12 @@
 /* eslint-disable react/no-unstable-nested-components */
 import React from 'react';
-import {StatusBar} from 'react-native';
+import { StatusBar } from 'react-native';
 
-import {NavigationContainer} from '@react-navigation/native';
-import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
-import {Icon, useTheme} from '@rneui/themed';
+import { Icon, useTheme } from '@rneui/themed';
 
 import Home from '../screens/AuthorizedScreens/Home';
 import Preload from '../screens/Preload';
@@ -19,7 +19,7 @@ const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 
 function AppStack() {
-  const {theme} = useTheme();
+  const { theme } = useTheme();
   return (
     <Tab.Navigator
       initialRouteName="Home"
@@ -65,10 +65,9 @@ function AuthStack() {
 }
 
 const Navigator = () => {
-  const {theme} = useTheme();
   return (
     <NavigationContainer>
-      <StatusBar backgroundColor={theme.colors.primaryDark} />
+      <StatusBar />
       <Stack.Navigator
         initialRouteName="AuthStack"
         screenOptions={{

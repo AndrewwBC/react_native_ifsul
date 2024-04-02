@@ -2,32 +2,46 @@
 import React, { useContext, useState } from 'react';
 import { Alert } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { CommonActions } from '@react-navigation/native';
 import { useTheme } from '@rneui/themed';
+import { AuthUserContext } from '../../../context/AuthUserProvider';
 
 import {
+  Border,
+  BordersContainer,
   ButtonText,
+  ButtonsContainer,
   Container,
   Content,
+  ErrorMsg,
+  FirstStepButtonContainer,
   FormContainer,
-  SignUpButton,
+  SecondStepButtonContainer,
+  SignInText,
+  SignInTextNavigator,
+  StepsButtonsContainer,
   Title,
 } from './styles';
-
 import { Icon, Text } from '@rneui/base';
-import { TouchableHighlight } from 'react-native';
-import { firebase } from '@react-native-firebase/auth';
-import { LoginUserContext } from '../../../context/LoginUserProvider';
 import MyInput from '../../../components/MyInput';
+import MyButtonOpacity from '../../../components/MyButtonOpacity';
+import { LoginUserContext } from '../../../context/LoginUserProvider';
 
-const SignUp = ({ navigation }) => {
+const SignIn = ({ navigation }) => {
   const [userData, setUserData] = useState({
-    email: 'pelotas@maail.com',
-    password: '111111',
+    email: '',
+    password: '',
   });
   const [loading, setLoading] = useState(false);
-  const [signUpResponse, setSignUpResponse] = useState(false);
-  const [errorMsg, setErrorMsg] = useState(false);
   const [showPass, setShowPass] = useState(true);
+  const [errorMsg, setErrorMsg] = useState('');
+
+  const [registerSteps, setRegisterSteps] = useState({
+    firstStep: true,
+    secondStep: false,
+    allStepsConcluded: false,
+  });
+
   const { theme } = useTheme();
 
   const { signUp } = useContext(LoginUserContext);
@@ -51,95 +65,205 @@ const SignUp = ({ navigation }) => {
     }
   }
 
+  console.log(showPass);
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <Container>
-        <Content>
-          <Title>SignUp</Title>
-          <FormContainer>
-            <MyInput
-              leftIcon={
-                <Icon
-                  name="email-check-outline"
-                  type="material-community"
-                  size={26}
-                  color={'black'}
-                />
-              }
-              placeholder="insira o seu email"
-              keyboardType="email-address"
-              returnKeyType="next"
-              onChangeText={email =>
-                setUserData(prevState => ({
-                  ...prevState,
-                  email,
-                }))
-              }
-            />
-            <MyInput
-              secureTextEntry={showPass}
-              placeholder="Senha"
-              keyboardType="default"
-              returnKeyType="go"
-              leftIcon={
-                <Icon
-                  type="material-community"
-                  name="form-textbox-password"
-                  size={26}
-                  color={'black'}
-                />
-              }
-              rightIcon={
-                <Icon
-                  type="material-community"
-                  name={showPass ? 'eye-off' : 'eye'}
-                  size={26}
-                  color={'black'}
-                  onPress={() => setShowPass(!showPass)}
-                />
-              }
-              onChangeText={password =>
-                setUserData(prevState => ({
-                  ...prevState,
-                  password,
-                }))
-              }
-            />
-          </FormContainer>
+        <Content behavior="position">
+          <Title>Registre-se</Title>
 
-          <Text
-            style={{
-              color: 'red',
-              fontSize: 16,
-              fontWeight: 600,
-              marginTop: 12,
-            }}>
-            {errorMsg && errorMsg}
-          </Text>
+          {registerSteps.firstStep && (
+            <FormContainer>
+              <MyInput
+                leftIcon={
+                  <Icon
+                    name="badge-account"
+                    type="material-community"
+                    size={26}
+                    color={'black'}
+                  />
+                }
+                placeholder="insira o seu nome de usuario"
+                keyboardType="email-address"
+                returnKeyType="next"
+                onChangeText={email =>
+                  setUserData(prevState => ({
+                    ...prevState,
+                    email,
+                  }))
+                }
+              />
+              <MyInput
+                leftIcon={
+                  <Icon
+                    name="email-check-outline"
+                    type="material-community"
+                    size={26}
+                    color={'black'}
+                  />
+                }
+                placeholder="insira o seu email"
+                keyboardType="email-address"
+                returnKeyType="next"
+                onChangeText={email =>
+                  setUserData(prevState => ({
+                    ...prevState,
+                    email,
+                  }))
+                }
+              />
+            </FormContainer>
+          )}
 
-          <SignUpButton onPress={handleSignUp}>
-            <ButtonText style={{ color: 'white' }}>
-              {signUpResponse ? signUpResponse : 'SignUp'}
-            </ButtonText>
-          </SignUpButton>
+          {registerSteps.secondStep && (
+            <FormContainer>
+              <MyInput
+                placeholder="insira a senha"
+                keyboardType="default"
+                returnKeyType="go"
+                autoCapitalize={'none'}
+                secureTextEntry={showPass}
+                leftIcon={
+                  <Icon
+                    type="material-community"
+                    name="form-textbox-password"
+                    size={26}
+                    color={'black'}
+                  />
+                }
+                onChangeText={password =>
+                  setUserData(prevState => ({
+                    ...prevState,
+                    password,
+                  }))
+                }
+              />
+              <MyInput
+                placeholder="insira a senha"
+                keyboardType="default"
+                returnKeyType="go"
+                autoCapitalize={'none'}
+                secureTextEntry={showPass}
+                leftIcon={
+                  <Icon
+                    type="material-community"
+                    name="form-textbox-password"
+                    size={26}
+                    color={'black'}
+                  />
+                }
+                rightIcon={
+                  <Icon
+                    type="material-community"
+                    name={showPass ? 'eye-off' : 'eye'}
+                    size={26}
+                    color={'black'}
+                    onPress={() => setShowPass(!showPass)}
+                  />
+                }
+                onChangeText={password =>
+                  setUserData(prevState => ({
+                    ...prevState,
+                    password,
+                  }))
+                }
+              />
+            </FormContainer>
+          )}
 
-          <TouchableHighlight
-            onPress={() => {
-              navigation.navigate('SignIn');
-            }}
-            style={{
-              backgroundColor: 'green',
-              borderRadius: 8,
-              padding: 12,
-              alignItems: 'center',
-              marginTop: 24,
-            }}>
-            <Text style={{ color: 'white', fontSize: 16 }}>SignIn</Text>
-          </TouchableHighlight>
+          <ErrorMsg>{errorMsg}</ErrorMsg>
+
+          {registerSteps.firstStep && (
+            <FirstStepButtonContainer>
+              <MyButtonOpacity>
+                <ButtonText
+                  onPress={() =>
+                    setRegisterSteps({
+                      firstStep: false,
+                      secondStep: true,
+                      allStepsConcluded: false,
+                    })
+                  }
+                  style={{ color: 'white' }}>
+                  Avançar
+                </ButtonText>
+              </MyButtonOpacity>
+            </FirstStepButtonContainer>
+          )}
+
+          {registerSteps.secondStep &&
+            registerSteps.allStepsConcluded === false && (
+              <SecondStepButtonContainer>
+                <MyButtonOpacity>
+                  <ButtonText
+                    onPress={() =>
+                      setRegisterSteps({
+                        firstStep: true,
+                        secondStep: false,
+                        allStepsConcluded: false,
+                      })
+                    }
+                    style={{ color: 'white' }}>
+                    Retornar
+                  </ButtonText>
+                </MyButtonOpacity>
+
+                <MyButtonOpacity>
+                  <ButtonText
+                    onPress={() =>
+                      setRegisterSteps({
+                        firstStep: false,
+                        secondStep: true,
+                        allStepsConcluded: true,
+                      })
+                    }
+                    style={{ color: 'white' }}>
+                    Avançar
+                  </ButtonText>
+                </MyButtonOpacity>
+              </SecondStepButtonContainer>
+            )}
+
+          {registerSteps.allStepsConcluded && (
+            <SecondStepButtonContainer>
+              <MyButtonOpacity>
+                <ButtonText
+                  onPress={() =>
+                    setRegisterSteps({
+                      firstStep: true,
+                      secondStep: false,
+                      allStepsConcluded: false,
+                    })
+                  }
+                  style={{ color: 'white' }}>
+                  Retornar
+                </ButtonText>
+              </MyButtonOpacity>
+              <MyButtonOpacity>
+                <ButtonText style={{ color: 'white' }}>Concluir</ButtonText>
+              </MyButtonOpacity>
+            </SecondStepButtonContainer>
+          )}
+
+          <ButtonsContainer>
+            <BordersContainer>
+              <Border />
+              <Text style={{ color: 'gray' }}>OU</Text>
+              <Border />
+            </BordersContainer>
+
+            <SignInText
+              onPress={() => {
+                navigation.navigate('SignIn');
+              }}>
+              Já possui uma conta? Faça
+              <SignInTextNavigator> Login!</SignInTextNavigator>
+            </SignInText>
+          </ButtonsContainer>
         </Content>
       </Container>
     </SafeAreaView>
   );
 };
 
-export default SignUp;
+export default SignIn;

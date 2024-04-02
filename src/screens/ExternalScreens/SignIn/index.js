@@ -1,21 +1,30 @@
 /* eslint-disable react-native/no-inline-styles */
 import React, { useContext, useState } from 'react';
-import { Alert, TouchableHighlight } from 'react-native';
+import { Alert, TouchableHighlight, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { CommonActions } from '@react-navigation/native';
 import { useTheme } from '@rneui/themed';
 import { AuthUserContext } from '../../../context/AuthUserProvider';
 
 import {
+  Border,
+  BordersContainer,
   ButtonText,
+  ButtonsContainer,
   Container,
   Content,
+  ErrorMsg,
+  ForgotPasswordContainer,
+  ForgotPasswordText,
   FormContainer,
   SignInButton,
+  SignUpText,
+  SignUpTextNavigator,
   Title,
 } from './styles';
 import { Icon, Text } from '@rneui/base';
 import MyInput from '../../../components/MyInput';
+import MyButtonOpacity from '../../../components/MyButtonOpacity';
 
 const SignIn = ({ navigation }) => {
   const [userData, setUserData] = useState({
@@ -54,12 +63,12 @@ const SignIn = ({ navigation }) => {
 
     setLoading(false);
   }
-
+  console.log(showPass);
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <Container>
-        <Content>
-          <Title>SignIn</Title>
+        <Content behavior="height">
+          <Title>Pets4Ever</Title>
           <FormContainer>
             <MyInput
               leftIcon={
@@ -81,10 +90,11 @@ const SignIn = ({ navigation }) => {
               }
             />
             <MyInput
-              secureTextEntry={showPass}
               placeholder="insira a senha"
               keyboardType="default"
               returnKeyType="go"
+              autoCapitalize={'none'}
+              secureTextEntry={showPass}
               leftIcon={
                 <Icon
                   type="material-community"
@@ -109,47 +119,36 @@ const SignIn = ({ navigation }) => {
                 }))
               }
             />
+            <ForgotPasswordContainer>
+              <ForgotPasswordText
+                onPress={() => {
+                  navigation.navigate('ForgotPassword');
+                }}>
+                Esqueceu a senha?
+              </ForgotPasswordText>
+            </ForgotPasswordContainer>
           </FormContainer>
-          <Text
-            style={{
-              height: 24,
-              color: 'red',
-              fontSize: 18,
-              textAlign: 'center',
-              marginTop: 12,
-            }}>
-            {errorMsg}
-          </Text>
-          <SignInButton onPress={handleSignIn}>
-            <ButtonText style={{ color: 'white' }}>SignIn</ButtonText>
-          </SignInButton>
+          <ErrorMsg>{errorMsg}</ErrorMsg>
 
-          <TouchableHighlight
-            onPress={() => {
-              navigation.navigate('SignUp');
-            }}
-            style={{
-              backgroundColor: 'green',
-              borderRadius: 8,
-              padding: 12,
-              alignItems: 'center',
-              marginTop: 24,
-            }}>
-            <Text style={{ color: 'white', fontSize: 16 }}>SignUp</Text>
-          </TouchableHighlight>
-          <TouchableHighlight
-            onPress={() => {
-              navigation.navigate('ForgotPassword');
-            }}
-            style={{
-              backgroundColor: 'green',
-              borderRadius: 8,
-              padding: 12,
-              alignItems: 'center',
-              marginTop: 24,
-            }}>
-            <Text style={{ color: 'white', fontSize: 16 }}>ForgotPassword</Text>
-          </TouchableHighlight>
+          <ButtonsContainer>
+            <MyButtonOpacity onPress={handleSignIn}>
+              <ButtonText style={{ color: 'white' }}>Entrar</ButtonText>
+            </MyButtonOpacity>
+
+            <BordersContainer>
+              <Border />
+              <Text style={{ color: 'gray' }}>OU</Text>
+              <Border />
+            </BordersContainer>
+
+            <SignUpText
+              onPress={() => {
+                navigation.navigate('SignUp');
+              }}>
+              Ainda não possui uma conta?
+              <SignUpTextNavigator> Registre-se</SignUpTextNavigator>
+            </SignUpText>
+          </ButtonsContainer>
         </Content>
       </Container>
     </SafeAreaView>
