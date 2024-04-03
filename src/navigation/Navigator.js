@@ -31,18 +31,7 @@ function AppStack() {
         component={Home}
         options={{
           tabBarLabel: 'Alunos',
-          tabBarIcon: () => (
-            <Icon
-              type="ionicon"
-              name="people"
-              color={
-                theme.mode === 'light'
-                  ? theme.colors.primary
-                  : theme.colors.black
-              }
-              size={20}
-            />
-          ),
+          tabBarIcon: () => <Icon type="ionicon" name="people" size={20} />,
         }}
       />
     </Tab.Navigator>

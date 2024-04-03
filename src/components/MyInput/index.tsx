@@ -3,8 +3,8 @@ import React, { ReactNode } from 'react';
 import { Container, Input } from './styles';
 
 interface MyInputProps extends TextInputProps {
-  leftIcon: ReactNode;
-  rightIcon: ReactNode;
+  leftIcon?: ReactNode;
+  rightIcon?: ReactNode;
 }
 
 const MyInput = ({ leftIcon, rightIcon, ...rest }: MyInputProps) => {

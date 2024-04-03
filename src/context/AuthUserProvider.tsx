@@ -1,14 +1,16 @@
-import React, {createContext} from 'react';
+import React, { ReactNode, createContext } from 'react';
 import auth from '@react-native-firebase/auth';
 import EncryptedStorage from 'react-native-encrypted-storage';
 
-export const AuthUserContext = createContext({});
+import { AuthUserContextProps } from './utils/AuthUserContextProps';
 
-export const AuthUserProvider = ({children}) => {
+export const AuthUserContext = createContext<AuthUserContextProps | null>(null);
+
+export const AuthUserProvider = ({ children }: { children: ReactNode }) => {
   /*
     Cache criptografado do usuário
   */
-  async function storeUserSession(email, pass) {
+  async function storeUserSession(email: string, pass: string) {
     try {
       await EncryptedStorage.setItem(
         'user_session',
@@ -40,30 +42,32 @@ export const AuthUserProvider = ({children}) => {
         auth().signOut();
         await EncryptedStorage.removeItem('user_session');
       }
-    } catch (err) {
+    } catch (err: any) {
       console.error(err.message);
     }
   }
 
-  async function signIn(email, pass) {
+  async function signIn(email: string, pass: string) {
     try {
-      const {user} = await auth().signInWithEmailAndPassword(email, pass);
+      const { user } = await auth().signInWithEmailAndPassword(email, pass);
 
-      if (!auth().currentUser.emailVerified) {
-        console.log(user);
-        return user.emailVerified;
+      if (!auth().currentUser!.emailVerified) {
+        user.sendEmailVerification();
+        return { emailIsNotVerified: true };
       }
 
+      const userToken = await user.getIdToken(true);
+
       //await storeUserSession(email, pass);
-      return user.getIdToken();
-    } catch (e) {
+      return { userToken };
+    } catch (e: any) {
       const errorMsg = launchServerMessageErro(e);
-      return errorMsg;
+      return { errorMsg };
     }
   }
 
   //função utilitária
-  function launchServerMessageErro(e) {
+  function launchServerMessageErro(e: { code: string }) {
     switch (e.code) {
       case 'auth/user-not-found':
         return 'Usuário não cadastrado.';
@@ -81,7 +85,12 @@ export const AuthUserProvider = ({children}) => {
   }
   return (
     <AuthUserContext.Provider
-      value={{signIn, retrieveUserSession, deleteUserSession}}>
+      value={{
+        signIn,
+        deleteUserSession,
+        retrieveUserSession,
+        storeUserSession,
+      }}>
       {children}
     </AuthUserContext.Provider>
   );

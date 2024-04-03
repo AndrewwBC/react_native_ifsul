@@ -1,8 +1,12 @@
 /* eslint-disable react-native/no-inline-styles */
-import React, { useContext, useState } from 'react';
-import { Alert, TouchableHighlight, View } from 'react-native';
+import React, { DispatchWithoutAction, useContext, useState } from 'react';
+import { Alert } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { CommonActions } from '@react-navigation/native';
+import {
+  CommonActions,
+  NavigationProp,
+  RouteProp,
+} from '@react-navigation/native';
 import { useTheme } from '@rneui/themed';
 import { AuthUserContext } from '../../../context/AuthUserProvider';
 
@@ -17,7 +21,6 @@ import {
   ForgotPasswordContainer,
   ForgotPasswordText,
   FormContainer,
-  SignInButton,
   SignUpText,
   SignUpTextNavigator,
   Title,
@@ -25,8 +28,22 @@ import {
 import { Icon, Text } from '@rneui/base';
 import MyInput from '../../../components/MyInput';
 import MyButtonOpacity from '../../../components/MyButtonOpacity';
+import { AuthUserContextProps } from '../../../context/utils/AuthUserContextProps';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { RootStackParamListExternalRoutes } from '../../../navigation/utils/RootStackParamListExternalRoutes';
 
-const SignIn = ({ navigation }) => {
+type ForgotPassRoute = RouteProp<
+  RootStackParamListExternalRoutes,
+  'ForgotPassword'
+>;
+
+type RegisterRoute = RouteProp<RootStackParamListExternalRoutes, 'SignUp'>;
+
+const SignIn = ({
+  navigation,
+}: {
+  navigation: NavigationProp<DispatchWithoutAction>;
+}) => {
   const [userData, setUserData] = useState({
     email: '',
     password: '',
@@ -37,28 +54,35 @@ const SignIn = ({ navigation }) => {
 
   const { theme } = useTheme();
 
-  const { signIn } = useContext(AuthUserContext);
+  const { signIn } = useContext(AuthUserContext) as AuthUserContextProps;
 
   async function handleSignIn() {
+    setLoading(true);
     if (userData.email.length === 0 || userData.password.length === 0) {
       setErrorMsg('Preencha todos campos!');
       Alert.alert('Preencha todos campos');
       return;
     }
-    setLoading(true);
 
     const request = await signIn(userData.email, userData.password);
-    console.log(request);
 
-    if (!request.emailVerified) {
-      console.log('Email não verificado');
-    } else {
+    if ('emailIsNotVerified' in request) {
+      setErrorMsg('Email não verificado!');
+      Alert.alert('Email não verificado');
+    }
+    if ('userToken' in request) {
+      console.log(request.userToken);
       navigation.dispatch(
         CommonActions.reset({
           index: 0,
           routes: [{ name: 'AppStack' }],
         }),
       );
+    }
+
+    if ('errorMsg' in request) {
+      setErrorMsg(request.errorMsg!);
+      Alert.alert(request.errorMsg!);
     }
 
     setLoading(false);
@@ -122,7 +146,7 @@ const SignIn = ({ navigation }) => {
             <ForgotPasswordContainer>
               <ForgotPasswordText
                 onPress={() => {
-                  navigation.navigate('ForgotPassword');
+                  navigation.navigate<ForgotPassRoute>('ForgotPassword');
                 }}>
                 Esqueceu a senha?
               </ForgotPasswordText>

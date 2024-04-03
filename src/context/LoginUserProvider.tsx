@@ -1,5 +1,5 @@
-import {firebase} from '@react-native-firebase/auth';
-import React, {ErrorInfo, ReactNode, createContext} from 'react';
+import { firebase } from '@react-native-firebase/auth';
+import React, { ErrorInfo, ReactNode, createContext } from 'react';
 
 export const LoginUserContext = createContext({});
 
@@ -12,10 +12,10 @@ interface handleSignUpProps {
   password: string;
 }
 
-export const LoginUserProvider = ({children}: LoginUserProviderProps) => {
+export const LoginUserProvider = ({ children }: LoginUserProviderProps) => {
   async function forgotPassword(email: string) {
     try {
-      const {auth} = firebase;
+      const { auth } = firebase;
       const request = await auth().sendPasswordResetEmail(email);
 
       console.log(request);
@@ -26,9 +26,9 @@ export const LoginUserProvider = ({children}: LoginUserProviderProps) => {
     }
   }
 
-  async function signUp({email, password}: handleSignUpProps) {
+  async function signUp({ email, password }: handleSignUpProps) {
     try {
-      const {auth} = firebase;
+      const { auth } = firebase;
       const request = await auth().createUserWithEmailAndPassword(
         email,
         password,
@@ -42,7 +42,7 @@ export const LoginUserProvider = ({children}: LoginUserProviderProps) => {
   }
 
   return (
-    <LoginUserContext.Provider value={{forgotPassword, signUp}}>
+    <LoginUserContext.Provider value={{ forgotPassword, signUp }}>
       {children}
     </LoginUserContext.Provider>
   );

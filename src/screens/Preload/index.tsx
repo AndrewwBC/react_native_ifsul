@@ -5,6 +5,7 @@ import { AuthUserContext } from '../../context/AuthUserProvider';
 
 import styled from 'styled-components/native';
 import { Animated, StyleSheet, Text, View } from 'react-native';
+import { AuthUserContextProps } from '../../context/utils/AuthUserContextProps';
 
 const dogHome = require('../../assets/images/dogHome.jpg');
 
@@ -17,7 +18,10 @@ export const Container = styled.SafeAreaView`
 export const Image = styled.Image``;
 
 const Preload = ({ navigation }) => {
-  const { retrieveUserSession, signIn } = useContext(AuthUserContext);
+  const { retrieveUserSession, signIn } = useContext(
+    AuthUserContext,
+  ) as AuthUserContextProps;
+
   const [opacity, setOpacity] = useState(0);
 
   const fadeAnim = useRef(new Animated.Value(0)).current;
@@ -33,16 +37,17 @@ const Preload = ({ navigation }) => {
   const entrar = async () => {
     const userSession = await retrieveUserSession();
 
-    if (
-      userSession &&
-      (await signIn(userSession.email, userSession.pass)) === 'ok'
-    ) {
-      navigation.dispatch(
-        CommonActions.reset({
-          index: 0,
-          routes: [{ name: 'AppStack' }],
-        }),
-      );
+    if (userSession) {
+      const result = await signIn(userSession.email, userSession.pass);
+
+      if ('userToken' in result) {
+        navigation.dispatch(
+          CommonActions.reset({
+            index: 0,
+            routes: [{ name: 'AppStack' }],
+          }),
+        );
+      }
     } else {
       navigation.dispatch(
         CommonActions.reset({
