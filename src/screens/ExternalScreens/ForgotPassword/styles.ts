@@ -37,3 +37,15 @@ export const ButtonText = styled.Text`
   color: #fff;
   text-align: center;
 `;
+
+export const BackToLogin = styled.Text`
+  margin-top: 32px;
+  font-size: 16px;
+  color: #222;
+  text-align: center;
+`;
+
+export const LoginText = styled.Text`
+  color: ${({ theme }) => theme.purple.dark};
+  font-weight: 700;
+`;

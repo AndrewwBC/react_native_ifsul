@@ -5,18 +5,22 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { useTheme } from '@rneui/themed';
 
 import {
+  BackToLogin,
   ButtonText,
   Container,
   Content,
   FormContainer,
+  LoginText,
   SignInButton,
   Title,
 } from './styles';
 import { Icon, Text } from '@rneui/base';
 import { LoginUserContext } from '../../../context/LoginUserProvider';
 import MyInput from '../../../components/MyInput';
+import { ForgotPasswordProps } from '../../../navigation/utils/ForgotPasswordScreenNavigationProps';
+import MyButtonHighlight from '../../../components/MyButtonHighlight/MyButtonHighlight';
 
-const ForgotPassword = ({ navigation }) => {
+const ForgotPassword = ({ navigation }: ForgotPasswordProps) => {
   const [email, setEmail] = useState('');
   const [loading, setLoading] = useState(false);
 
@@ -55,23 +59,19 @@ const ForgotPassword = ({ navigation }) => {
               onChangeText={text => setEmail(text)}
             />
           </FormContainer>
-          <SignInButton onPress={handleRetrievePassword}>
-            <ButtonText style={{ color: 'white' }}>Recuperar Senha</ButtonText>
-          </SignInButton>
 
-          <TouchableHighlight
-            onPress={() => {
-              navigation.navigate('SignIn');
-            }}
-            style={{
-              backgroundColor: 'green',
-              borderRadius: 8,
-              padding: 12,
-              alignItems: 'center',
-              marginTop: 24,
-            }}>
-            <Text style={{ color: 'white', fontSize: 16 }}>SignIn</Text>
-          </TouchableHighlight>
+          <MyButtonHighlight
+            style={{ marginTop: 32, marginBottom: 32 }}
+            onPress={handleRetrievePassword}>
+            <ButtonText style={{ color: 'white' }}>Recuperar Senha</ButtonText>
+          </MyButtonHighlight>
+
+          <BackToLogin style={{ color: '#000', fontSize: 16 }}>
+            Retorne para o{' '}
+            <LoginText onPress={() => navigation.navigate('SignIn')}>
+              Login
+            </LoginText>
+          </BackToLogin>
         </Content>
       </Container>
     </SafeAreaView>

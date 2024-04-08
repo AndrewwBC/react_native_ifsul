@@ -4,7 +4,36 @@ import EncryptedStorage from 'react-native-encrypted-storage';
 
 import { AuthUserContextProps } from './utils/AuthUserContextProps';
 
-export const AuthUserContext = createContext<AuthUserContextProps | null>(null);
+export const AuthUserContext = createContext<AuthUserContextProps>({
+  storeUserSession: function (email: string, pass: string): Promise<void> {
+    throw new Error('Function not implemented.');
+  },
+  retrieveUserSession: function (): Promise<any> {
+    throw new Error('Function not implemented.');
+  },
+  deleteUserSession: function (): Promise<void> {
+    throw new Error('Function not implemented.');
+  },
+  signIn: function (
+    email: string,
+    pass: string,
+  ): Promise<
+    | { emailIsNotVerified?: true | undefined }
+    | { userToken?: string | undefined }
+    | {
+        errorMsg?:
+          | 'Usuário não cadastrado.'
+          | 'Erro na senha.'
+          | 'Email inválido.'
+          | 'Usuário desabilitado.'
+          | 'Email em uso. Tente outro email.'
+          | 'Erro desconhecido. Contate o administrador'
+          | undefined;
+      }
+  > {
+    throw new Error('Function not implemented.');
+  },
+});
 
 export const AuthUserProvider = ({ children }: { children: ReactNode }) => {
   /*

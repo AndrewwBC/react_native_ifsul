@@ -1,8 +1,6 @@
 import { firebase } from '@react-native-firebase/auth';
 import React, { ErrorInfo, ReactNode, createContext } from 'react';
 
-export const LoginUserContext = createContext({});
-
 interface LoginUserProviderProps {
   children: ReactNode;
 }
@@ -12,6 +10,20 @@ interface handleSignUpProps {
   password: string;
 }
 
+interface LoginUserContextProps {
+  forgotPassword: (email: string) => Promise<void>;
+  signUp: ({ email, password }: handleSignUpProps) => Promise<void>;
+}
+
+export const LoginUserContext = createContext<LoginUserContextProps>({
+  forgotPassword: function (email: string): Promise<void> {
+    throw new Error('Function not implemented.');
+  },
+  signUp: function ({ email, password }: handleSignUpProps): Promise<void> {
+    throw new Error('Function not implemented.');
+  },
+});
+
 export const LoginUserProvider = ({ children }: LoginUserProviderProps) => {
   async function forgotPassword(email: string) {
     try {
@@ -19,7 +31,6 @@ export const LoginUserProvider = ({ children }: LoginUserProviderProps) => {
       const request = await auth().sendPasswordResetEmail(email);
 
       console.log(request);
-      return 'Email enviado!';
     } catch (error: any) {
       const errorMsg = error.message;
       throw new Error(errorMsg);

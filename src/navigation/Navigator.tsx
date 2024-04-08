@@ -6,13 +6,13 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
-import { Icon, useTheme } from '@rneui/themed';
+import { useTheme } from '@rneui/themed';
 
-import Home from '../screens/AuthorizedScreens/Home';
 import Preload from '../screens/Preload';
 import SignIn from '../screens/ExternalScreens/SignIn';
 import SignUp from '../screens/ExternalScreens/SignUp';
 import ForgotPassword from '../screens/ExternalScreens/ForgotPassword';
+import Feed from '../screens/AuthorizedScreens/Feed';
 
 const Stack = createNativeStackNavigator();
 
@@ -22,21 +22,23 @@ function AppStack() {
   const { theme } = useTheme();
   return (
     <Tab.Navigator
-      initialRouteName="Home"
+      initialRouteName="Feed"
       screenOptions={{
         headerShown: false,
       }}>
-      <Stack.Screen
-        name="Home"
-        component={Home}
-        options={{
-          tabBarLabel: 'Alunos',
-          tabBarIcon: () => <Icon type="ionicon" name="people" size={20} />,
-        }}
-      />
+      <Stack.Screen name="Feed" component={Feed} />
     </Tab.Navigator>
   );
 }
+
+type AuthStackParamList = {
+  Preload: undefined;
+  SignIn: undefined;
+  SignUp: undefined;
+  ForgotPassword: undefined;
+};
+
+const MyAuthStack = createNativeStackNavigator<AuthStackParamList>();
 
 function AuthStack() {
   return (

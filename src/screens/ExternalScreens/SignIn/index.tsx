@@ -1,13 +1,8 @@
 /* eslint-disable react-native/no-inline-styles */
-import React, { DispatchWithoutAction, useContext, useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { Alert } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import {
-  CommonActions,
-  NavigationProp,
-  RouteProp,
-} from '@react-navigation/native';
-import { useTheme } from '@rneui/themed';
+import { CommonActions, NavigationProp } from '@react-navigation/native';
 import { AuthUserContext } from '../../../context/AuthUserProvider';
 
 import {
@@ -29,21 +24,13 @@ import { Icon, Text } from '@rneui/base';
 import MyInput from '../../../components/MyInput';
 import MyButtonOpacity from '../../../components/MyButtonOpacity';
 import { AuthUserContextProps } from '../../../context/utils/AuthUserContextProps';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { RootStackParamListExternalRoutes } from '../../../navigation/utils/RootStackParamListExternalRoutes';
+import { SignUpScreenNavigationProps } from '../../../navigation/utils/SignUpScreenNavigationProps';
 
-type ForgotPassRoute = RouteProp<
-  RootStackParamListExternalRoutes,
-  'ForgotPassword'
->;
+interface SignInProps {
+  navigation: NavigationProp<SignUpScreenNavigationProps>;
+}
 
-type RegisterRoute = RouteProp<RootStackParamListExternalRoutes, 'SignUp'>;
-
-const SignIn = ({
-  navigation,
-}: {
-  navigation: NavigationProp<DispatchWithoutAction>;
-}) => {
+const SignIn = ({ navigation }: SignInProps) => {
   const [userData, setUserData] = useState({
     email: '',
     password: '',
@@ -51,8 +38,6 @@ const SignIn = ({
   const [loading, setLoading] = useState(false);
   const [showPass, setShowPass] = useState(true);
   const [errorMsg, setErrorMsg] = useState('');
-
-  const { theme } = useTheme();
 
   const { signIn } = useContext(AuthUserContext) as AuthUserContextProps;
 
@@ -146,7 +131,7 @@ const SignIn = ({
             <ForgotPasswordContainer>
               <ForgotPasswordText
                 onPress={() => {
-                  navigation.navigate<ForgotPassRoute>('ForgotPassword');
+                  navigation.navigate('ForgotPassword');
                 }}>
                 Esqueceu a senha?
               </ForgotPasswordText>
