@@ -1,15 +1,19 @@
 import React, { useContext } from 'react';
-import { View, FlatList, Text } from 'react-native';
+import { View, FlatList, Text, Image } from 'react-native';
 import { AuthUserContext } from '../../../context/AuthUserProvider';
 import { CommonActions } from '@react-navigation/native';
 import {
   BorderPostInfo,
+  CommentContainer,
   Container,
   IconsAndCreatedAt,
+  PostAcionsAndInfos,
   PostContainer,
   PostHeader,
   PostImage,
   PostInfo,
+  PostInfoDescription,
+  SeeAllComments,
   UserProfileImage,
   Username,
 } from './styles';
@@ -25,6 +29,7 @@ export default function Feed({ navigation }: any) {
       userName: '@andrew',
       description: 'É um bom garoto, ou não é?!?',
       created_at: '02/05/2023',
+      comment: 'Muito legal o seu post!',
     },
     {
       url: 'https://images.unsplash.com/photo-1616781296073-65d3f087de41?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxleHBsb3JlLWZlZWR8NHx8fGVufDB8fHx8fA%3D%3D',
@@ -71,12 +76,14 @@ export default function Feed({ navigation }: any) {
               <UserProfileImage source={{ uri: item.url }} />
               <Username>{item.userName}</Username>
             </PostHeader>
+
             <PostImage
               source={{
                 uri: item.url,
               }}
             />
-            <View>
+
+            <PostAcionsAndInfos>
               <IconsAndCreatedAt>
                 <View style={{ flexDirection: 'row', gap: 8 }}>
                   <Icon
@@ -100,11 +107,33 @@ export default function Feed({ navigation }: any) {
                 </View>
                 <Text style={{ color: '#222' }}>{item.created_at}</Text>
               </IconsAndCreatedAt>
+
               <PostInfo>
-                <Text style={{ color: '#222' }}>{item.description}</Text>
-                <BorderPostInfo />
+                <PostInfoDescription>{item.description}</PostInfoDescription>
               </PostInfo>
-            </View>
+
+              <BorderPostInfo />
+
+              <CommentContainer>
+                <SeeAllComments>Ver todos os comentários</SeeAllComments>
+
+                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                  <Username
+                    style={{
+                      color: 'grey',
+                      fontSize: 12,
+                      fontWeight: 'bold',
+                      marginRight: 4,
+                    }}>
+                    {item.userName}
+                  </Username>
+
+                  <Text style={{ color: 'black' }}>
+                    {item.comment && item.comment}
+                  </Text>
+                </View>
+              </CommentContainer>
+            </PostAcionsAndInfos>
           </PostContainer>
         )}
       />

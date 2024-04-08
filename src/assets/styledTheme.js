@@ -6,7 +6,7 @@ export const styledTheme = {
     c3: '#DEDEDE',
     c4: '#CCCCCC',
     c5: '#B1B1B1',
-    c6: '#404040',
+    c6: '#909090',
     c7: '#222222',
     c8: '#101010',
     c9: '#000000',

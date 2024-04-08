@@ -36,21 +36,37 @@ export const PostImage = styled.Image`
   height: 400;
 `;
 
+export const PostAcionsAndInfos = styled.View`
+  padding: 12px;
+  gap: 12px;
+`;
+
 export const IconsAndCreatedAt = styled.View`
   flex-direction: row;
   justify-content: space-between;
-  margin: 12px 0;
-  padding: 0 12px;
 `;
 
 export const PostInfo = styled.View`
+  flex-direction: row;
+  align-items: center;
   background-color: 'red';
-  padding: 0 12px;
-  margin-bottom: 24px;
+`;
+
+export const PostInfoDescription = styled.Text`
+  font-size: 14px;
+  color: ${({ theme }) => theme.neutral.c8};
 `;
 
 export const BorderPostInfo = styled.View`
-  width: 100%;
   height: 1px;
-  background: grey;
+  background: rgba(0, 0, 0, 0.2);
+`;
+
+export const CommentContainer = styled.View`
+  gap: 12px;
+`;
+
+export const SeeAllComments = styled.Text`
+  color: ${({ theme }) => theme.neutral.c6};
+  font-weight: 600;
 `;
