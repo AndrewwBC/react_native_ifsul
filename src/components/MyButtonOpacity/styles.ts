@@ -6,4 +6,8 @@ export const OpacityButton = styled.TouchableOpacity`
   color: #fff;
   border-radius: 8px;
   align-items: center;
+
+  &:disabled {
+    background-color: grey;
+  }
 `;

@@ -40,6 +40,8 @@ const Preload = ({ navigation }) => {
     if (userSession) {
       const result = await signIn(userSession.email, userSession.pass);
 
+      console.log(userSession, result);
+
       if ('userToken' in result) {
         navigation.dispatch(
           CommonActions.reset({

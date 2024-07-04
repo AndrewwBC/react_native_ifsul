@@ -82,30 +82,35 @@ export const SignInTextNavigator = styled.Text`
 
 export const FirstStepButtonContainer = styled.View`
   align-items: flex-end;
+  margin-top: 8px;
 `;
 
 export const SecondStepButtonContainer = styled.View`
   flex-direction: row;
   justify-content: space-between;
+  margin-top: 8px;
 `;
 
-// const { signUp } = useContext(LoginUserContext);
+export const FinalStepContainer = styled.View`
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 8px;
+`;
 
-// async function handleSignUp() {
-//   try {
-//     setErrorMsg('');
-//     setLoading(true);
-//     const { auth } = firebase;
-//     const response = await signUp({
-//       email: userData.email,
-//       password: userData.password,
-//     });
+export const UserData = styled.View`
+  gap: 8px;
+  margin: 32px 0;
+  background-color: #e9e9e9;
+  border-radius: 8px;
+  padding: 4px 4px 4px 4px;
+`;
 
-//     setSignUpResponse('Registrado com Sucesso!');
-//   } catch (error) {
-//     console.log(error.message);
-//     setErrorMsg(error.message);
-//   } finally {
-//     setLoading(false);
-//   }
-// }
+export const UserDataText = styled.Text`
+  font-size: 16px;
+  color: black;
+`;
+
+export const SignUpResponse = styled.Text`
+  color: green;
+`;

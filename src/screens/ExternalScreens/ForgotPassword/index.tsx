@@ -1,8 +1,6 @@
 /* eslint-disable react-native/no-inline-styles */
 import React, { useContext, useState } from 'react';
-import { Alert, TouchableHighlight } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useTheme } from '@rneui/themed';
 
 import {
   BackToLogin,
@@ -11,14 +9,17 @@ import {
   Content,
   FormContainer,
   LoginText,
-  SignInButton,
   Title,
 } from './styles';
+
 import { Icon, Text } from '@rneui/base';
+
 import { LoginUserContext } from '../../../context/LoginUserProvider';
+
 import MyInput from '../../../components/MyInput';
-import { ForgotPasswordProps } from '../../../navigation/utils/ForgotPasswordScreenNavigationProps';
 import MyButtonHighlight from '../../../components/MyButtonHighlight/MyButtonHighlight';
+import { ForgotPasswordProps } from '../../../navigation/utils/ScreensNavigationProps';
+import { Alert } from 'react-native';
 
 const ForgotPassword = ({ navigation }: ForgotPasswordProps) => {
   const [email, setEmail] = useState('');
@@ -26,12 +27,24 @@ const ForgotPassword = ({ navigation }: ForgotPasswordProps) => {
 
   const { forgotPassword } = useContext(LoginUserContext);
 
-  function handleRetrievePassword() {
+  async function handleRetrievePassword() {
+    const isEmailValid = /^[a-z0-9.]+@[a-z0-9]+\.[a-z]+\.([a-z]+)?$/i.test(
+      email,
+    );
+
+    if (!isEmailValid) {
+      Alert.alert('Email inválido!');
+      return;
+    }
     try {
       setLoading(true);
-      forgotPassword(email);
-    } catch (err) {
+      const response = await forgotPassword(email);
+      console.log(response);
+      Alert.alert('Verifique o seu email para mudar a senha.');
+    } catch (err: any) {
       console.log(err);
+
+      Alert.alert(err.code);
     } finally {
       setLoading(false);
     }

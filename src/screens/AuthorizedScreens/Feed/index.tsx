@@ -71,7 +71,7 @@ export default function Feed({ navigation }: any) {
         keyExtractor={item => item.userName}
         contentContainerStyle={{ gap: 48 }}
         renderItem={({ item }) => (
-          <PostContainer>
+          <PostContainer style={{ elevation: 1 }}>
             <PostHeader>
               <UserProfileImage source={{ uri: item.url }} />
               <Username>{item.userName}</Username>

@@ -31,8 +31,10 @@ export const LoginUserProvider = ({ children }: LoginUserProviderProps) => {
       const request = await auth().sendPasswordResetEmail(email);
 
       console.log(request);
+      return request;
     } catch (error: any) {
       const errorMsg = error.message;
+      console.log(error);
       throw new Error(errorMsg);
     }
   }

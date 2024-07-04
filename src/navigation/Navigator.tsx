@@ -13,6 +13,7 @@ import SignIn from '../screens/ExternalScreens/SignIn';
 import SignUp from '../screens/ExternalScreens/SignUp';
 import ForgotPassword from '../screens/ExternalScreens/ForgotPassword';
 import Feed from '../screens/AuthorizedScreens/Feed';
+import SignOutModal from '../components/SignOutModal';
 
 const Stack = createNativeStackNavigator();
 
@@ -27,6 +28,7 @@ function AppStack() {
         headerShown: false,
       }}>
       <Stack.Screen name="Feed" component={Feed} />
+      <Stack.Screen name="SignOut" component={SignOutModal} />
     </Tab.Navigator>
   );
 }

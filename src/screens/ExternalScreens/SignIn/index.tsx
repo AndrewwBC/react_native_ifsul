@@ -24,10 +24,10 @@ import { Icon, Text } from '@rneui/base';
 import MyInput from '../../../components/MyInput';
 import MyButtonOpacity from '../../../components/MyButtonOpacity';
 import { AuthUserContextProps } from '../../../context/utils/AuthUserContextProps';
-import { SignUpScreenNavigationProps } from '../../../navigation/utils/SignUpScreenNavigationProps';
+import { SignInScreenNavigationProps } from '../../../navigation/utils/ScreensNavigationProps';
 
 interface SignInProps {
-  navigation: NavigationProp<SignUpScreenNavigationProps>;
+  navigation: NavigationProp<SignInScreenNavigationProps>;
 }
 
 const SignIn = ({ navigation }: SignInProps) => {
@@ -39,24 +39,28 @@ const SignIn = ({ navigation }: SignInProps) => {
   const [showPass, setShowPass] = useState(true);
   const [errorMsg, setErrorMsg] = useState('');
 
-  const { signIn } = useContext(AuthUserContext) as AuthUserContextProps;
+  const { signIn, storeUserSession } = useContext(
+    AuthUserContext,
+  ) as AuthUserContextProps;
 
   async function handleSignIn() {
     setLoading(true);
     if (userData.email.length === 0 || userData.password.length === 0) {
       setErrorMsg('Preencha todos campos!');
       Alert.alert('Preencha todos campos');
+
       return;
     }
 
     const request = await signIn(userData.email, userData.password);
 
     if ('emailIsNotVerified' in request) {
-      setErrorMsg('Email não verificado!');
-      Alert.alert('Email não verificado');
+      setErrorMsg('Email não Validado!');
+      Alert.alert('Email não Validado');
     }
     if ('userToken' in request) {
-      console.log(request.userToken);
+      await storeUserSession(userData.email, userData.password);
+
       navigation.dispatch(
         CommonActions.reset({
           index: 0,
@@ -72,7 +76,6 @@ const SignIn = ({ navigation }: SignInProps) => {
 
     setLoading(false);
   }
-  console.log(showPass);
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <Container>
